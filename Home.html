@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>plateforme de gestion de manifestation</title>
+    <link rel="stylesheet" href="bootstrap-4.4.1-dist/css/bootstrap.min.css">
+    
+    <!--<script src="jquery-3.4.1.min"></script>-->
+    <!-- partie du head du calendrier -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+    
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" />
+
+   <link rel="stylesheet" href="stylehome.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+   <script>
+   
+  $(document).ready(function() {
+   var calendar = $('#calendar').fullCalendar({
+    editable:true,
+    header:{
+     left:'prev,next today',
+     center:'title',
+     right:'month,agendaWeek,agendaDay'
+    },
+    events: '../Calendar/load.php',
+    selectable:true,
+    selectHelper:true,
+    select: function(start, end, allDay)
+    {
+     var title = prompt("Enter Event Title");
+     if(title)
+     {
+      var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+      var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+      $.ajax({
+       url:"../Calendar/insert.php",
+       type:"POST",
+       data:{title:title, start:start, end:end},
+       success:function()
+       {
+        calendar.fullCalendar('refetchEvents');
+        alert("Added Successfully");
+       }
+      })
+     }
+    },
+    editable:true,
+    eventResize:function(event)
+    {
+     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+     var title = event.title;
+     var id = event.id;
+     $.ajax({
+      url:"../Calendar/update.php",
+      type:"POST",
+      data:{title:title, start:start, end:end, id:id},
+      success:function(){
+       calendar.fullCalendar('refetchEvents');
+       alert('Event Update');
+      }
+     })
+    },
+
+    eventDrop:function(event)
+    {
+     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+     var title = event.title;
+     var id = event.id;
+     $.ajax({
+      url:"../Calendar/update.php",
+      type:"POST",
+      data:{title:title, start:start, end:end, id:id},
+      success:function()
+      {
+       calendar.fullCalendar('refetchEvents');
+       alert("Event Updated");
+      }
+     });
+    },
+
+    eventClick:function(event)
+    {
+     if(confirm("Are you sure you want to remove it?"))
+     {
+      var id = event.id;
+      $.ajax({
+       url:"../Calendar/delete.php",
+       type:"POST",
+       data:{id:id},
+       success:function()
+       {
+        calendar.fullCalendar('refetchEvents');
+        alert("Event Removed");
+       }
+      })
+     }
+    },
+
+   });
+  });
+   
+  </script>
+
+  <!-- fin de partie head du calendar -->
+</head>
+
+<body>
+    <div class="container_fluid head">
+        <div class="shadow_head">
+        <div class="header">
+            <ul class="header_list">
+                <li> <a href="LOGIN/login.php"><button type="button" class="btn btn-outline-light">Espace Administrateur</button> </a> </li>
+                
+            </ul>
+        </div>
+        <div class="calendarImg">
+            <img src="images/Calendar_Img.png" alt="Illustration d'un Calendrier">
+        </div>
+        
+        <div class="header_text">
+            <h1>Platforme de gestion <br> d'évenement</h1>
+            <p>Notre plateforme vous permet de visualiser régulièrement les différents évenement <br>de votre université (conférence, séminaire, soirée, manifestation sportive,  <br>assemblée générale ...)</p>
+            <a href="#calend"> <button id="btn_calendar" type="button" class="btn btn-primary btn-lg">View Calendar</button></a>
+        </div>
+        </div>
+
+    </div>
+    <!-- div du view calendar -->
+    <center>
+    <div id='calend' class="container Cald">
+        <br />
+        <h2 align="center"><a href="#">Calendrier d'évenement</a></h2>
+        <br />
+        <div id="calendar"></div>
+    </div></center>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Copyright © 2020</p>
+    </footer>
+
+    <!-- fonction de scroll vers le bas si on click sur view calendar -->
+    <script>
+        $("a[href^='#']").click(function(e) {
+	e.preventDefault();
+	
+	var position = $($(this).attr("href")).offset().top;
+
+	$("body, html").animate({
+		scrollTop: position
+	} /* speed */ );
+});
+    </script>
+</body>
+</html>
