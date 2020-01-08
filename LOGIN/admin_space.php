@@ -1,11 +1,14 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['user']))
+/*if(!isset($_SESSION['user']))
 {
     header('location:login.php');
 }
+*/
+$bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', '');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +24,10 @@ if(!isset($_SESSION['user']))
         text-decoration : none;
         color : white;
       }
+      #add__new__list{
+      top: 20px;
+      right: 0px;
+}
     </style>
     
 </head>
@@ -33,59 +40,46 @@ if(!isset($_SESSION['user']))
     <h2 class="card-title">Espace réservé à l'administrateur de l'Université!</h2>
   </div>
     <div class="card">
-        <button id="add__new__list" type="button" class="btn btn-primary position-absolute" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-plus"></i> <a href="../Form/index.php"> Ajouter un nouveau évenement</a></button>
+        <button id="add_new_list" type="button" class="btn btn-primary position-absolute" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-plus"></i> <a href="../Form/index.php"> Ajouter un nouveau évenement</a></button>
         
         <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name Event</th>
-                <th scope="col">Organisateur</th>
-                <th scope="col">Date</th>
+                <th scope="col">théme</th>
+                <th scope="col">Date début</th>
+                <th scope="col">Date fin</th>
                 <th scope="col">Salle</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
+              <?php
+              $reponse = $bdd->query('SELECT * FROM events');
+
+              while ($donnees = $reponse->fetch())
+              { 
+              ?>
+              
               <tr>
-                <th scope="row">1</th>
-                <td>Atelier entreprenarial</td>
-                <td>Enactus</td>
-                <td>06 Janvier 2020</td>
-                <td>Salle de formation</td>
+                <th scope="row"><?php echo $donnees['id_ev']?></th>
+                <td><?php echo  $donnees['intitulé']?></td>
+                <td><?php  echo $donnees['thème']?></td>
+                <td><?php echo $donnees['date_db']; ?></td>
+                <td><?php echo $donnees['date_fn']; ?></td>
+                <td><?php echo $donnees['salle']?></td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="#"><i class="far fa-edit"></i> Modifier</a>
-                    <a class="btn btn-sm btn-success" href="#"><i class="fas fa-trash-alt"></i> Approuver</a>
-                    <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt"></i>Refuser</a> 
+                    <a class="btn btn-sm btn-primary" href="../Form/index.php"><i class="far fa-edit"></i> Modifier</a>
+                    <a class="btn btn-sm btn-success" href="../PHP/publier.php"><i class="fas fa-trash-alt"></i>Publier</a>
+                    <a class="btn btn-sm btn-danger" href="../PHP/detail.php"><i class="fas fa-trash-alt"></i>Détails</a> 
                            
                 </td>
                 
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>séminaire</td>
-                <td>Association des étudiants</td>
-                <td>12 Janvier 2020</td>
-                <td>Salle de coference</td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="#"><i class="far fa-edit"></i> Modifier</a>
-                    <a class="btn btn-sm btn-success" href="#"><i class="fas fa-trash-alt"></i> Approuver</a>
-                    <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt"></i>Refuser</a>     
-                </td>
-                
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Match sportive</td>
-                <td>Club du sport</td>
-                <td>17 Mars 2020</td>
-                <td>Terrain</td>
-                <td>       
-                    <a class="btn btn-sm btn-primary" href="#"><i class="far fa-edit"></i> Modifier</a>
-                    <a class="btn btn-sm btn-success" href="#"><i class="fas fa-trash-alt"></i> Approuver</a>
-                    <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt"></i>Refuser</a>     
-                </td>
-                
+              <?php
+              }
+              ?>
               </tr>
             </tbody>
           </table>
