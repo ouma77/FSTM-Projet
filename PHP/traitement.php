@@ -23,7 +23,6 @@ if(isset($dateDeb) AND isset($dateFin)){
 
     $donnee = $reponse->fetch();
     if($donnee){
-        //echo "<script> alert('La date est deja reservé') </script>";
         $_SESSION['erreur']= 'La date ou la salle est déja réservé!';
         header('location:../Form/index.php');
     }else{
@@ -53,7 +52,9 @@ if(isset($dateDeb) AND isset($dateFin)){
              ));
             header('location:../LOGIN/admin_space.php');
         }
+
         else
+        
         {
             $r=$bdd->prepare('INSERT INTO organisatuer 
             (mail,nom,prénom,profession) VALUES (:mail,:nom,:prenom,:profession)');
@@ -84,7 +85,6 @@ if(isset($dateDeb) AND isset($dateFin)){
             'commentaire'=> $commentaire
              ));
              header('location:../LOGIN/admin_space.php');
-
 
         }
     }
