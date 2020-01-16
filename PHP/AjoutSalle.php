@@ -8,7 +8,7 @@ $bdd=new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root','');
      'name_salle'=> $_POST['Ajout_salle']
  ));
  
- $req
+ 
 
  header('location:../LOGIN/admin_space.php');
 
