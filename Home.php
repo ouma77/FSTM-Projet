@@ -18,7 +18,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
    <script>
    
-   $(document).ready(function() {
+  $(document).ready(function() {
    var calendar = $('#calendar').fullCalendar({
     editable: false,
     header:{
@@ -26,22 +26,18 @@
      center:'title',
      right:'month,agendaWeek,agendaDay'
     },
-    <?php $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''); 
-    $reponse = $bdd->query('SELECT * FROM calendar'); ?>
-    <?php while ($donnees = $reponse->fetch())?>
-    events: [
-        <?php while ($donnees = $reponse->fetch()) {?>
+    <?php $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''); ?>
+    events:[ <?php $reponse = $bdd->query('SELECT * FROM calendar'); 
+                  while ($donnees = $reponse->fetch())
+    { ?>
         {
-            'title': <?php echo  $donnees['intitulé']?>,
-            'start': <?php echo $donnees['date_db']; ?>
+            'title':'<?php echo  $donnees['intitulé']?>',
+            'start':'<?php echo $donnees['date_db']; ?>',
+            'end':'<?php echo $donnees['date_fn']; ?>'
         },
-        // {
-        //     'title': 'travel to impact',
-        //     'start': '2020-01-04'
-        // }
-        <?php } ?>
-    ],
     
+<?php } ?>],
+
     eventClick:function(event)
     {
      if(confirm("Are you sure you want to remove it?"))
