@@ -53,6 +53,9 @@ $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             </div>
             <form action="savemodif.php">
 
+            <input type="hidden" name="id" id="" value= "<?php echo($donnee['id_ev']);?>">
+            <input type="hidden" name="id2" id="" value= "<?php echo($donnee['id_org']);?>">
+
                     <div class="place line">
                         <label>Nom :
                         <input type="text" name="nom" 
