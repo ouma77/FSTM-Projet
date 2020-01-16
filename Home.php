@@ -32,31 +32,36 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
      center:'title',
      right:'month,agendaWeek,agendaDay'
     },
+    <?php $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''); ?>
+    events:[ <?php $reponse = $bdd->query('SELECT * FROM calendar'); 
+                  while ($donnees = $reponse->fetch())
+    { ?>
+        {
+            'title':"<?php echo  $donnees['intitulé']?>",
+            'start':'<?php echo $donnees['date_db']; ?>',
+            'end':'<?php echo $donnees['date_fn']; ?>'
+        },
     
-    events: '../Calendar/load.php',
+<?php } ?>],
+    eventClick:function(event)
+    {
+     if(confirm("Are you sure you want to remove it?"))
+     {
+      var id = event.id;
+      $.ajax({
+       url:"../Calendar/delete.php",
+       type:"POST",
+       data:{id:id},
+       success:function()
+       {
+        calendar.fullCalendar('refetchEvents');
+        alert("Event Removed");
+       }
+      })
+     }
+    },
    });
   });
-
-//     eventClick:function(event)
-//     {
-//      if(confirm("Are you sure you want to remove it?"))
-//      {
-//       var id = event.id;
-//       $.ajax({
-//        url:"../Calendar/delete.php",
-//        type:"POST",
-//        data:{id:id},
-//        success:function()
-//        {
-//         calendar.fullCalendar('refetchEvents');
-//         alert("Event Removed");
-//        }
-//       })
-//      }
-//     },
-
-//    });
-//   });
    
   </script>
 
@@ -86,20 +91,22 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
     </div>
 
         <!-- Timeline bootsnip -->
+        
+                <!-- Timeline bootsnip -->
 
-        <div class="container mt-5 mb-5">
+                <div class="container mt-5 mb-5">
             <div class="row">
                 <div class="timee col-md-6 offset-md-3">
                     <h4>Actualités</h4>
                     <ul class="timeline">
                     <?php
-              $reponse = $bdd->query('SELECT * FROM calendar ORDER BY date_db DESC LIMIT 1, 3');
+              $reponse = $bdd->query('SELECT * FROM calendar ORDER BY date_db DESC LIMIT 3');
 
               while ($donnees = $reponse->fetch())
               { 
               ?>
                         <li>
-                            <a target="_blank" href="#"><?php echo  $donnees['intitulé']?></a>
+                            <a target="_blank" href="#"><strong> <?php echo  $donnees['intitulé']?> </strong></a>
                             <a href="#" class="float-right">  De <?php echo $donnees['date_db']; ?> à <?php echo $donnees['date_fn']; ?></a>
                             <p><?php echo $donnees['commentaire']; ?></p>
                         </li>
@@ -107,8 +114,8 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
                     </ul>
                 </div>
             </div>
-        </div> 
-        
+        </div>
+
     <!-- div du view calendar -->
     <center>
     <div id='calend' class="container Cald">
@@ -131,7 +138,6 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
 	e.preventDefault();
 	
 	var position = $($(this).attr("href")).offset().top;
-
 	$("body, html").animate({
 		scrollTop: position
 	} /* speed */ );
