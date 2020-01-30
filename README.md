@@ -1,7 +1,5 @@
 # FSTM-Projet
-Plateforme de gestion d'événement. 
-
-Projet académique
+Plateforme de gestion d'événement (Projet académique):
 
 Conception et réalisation d’une application web de gestion du
 planning des manifestations dans une université et les
