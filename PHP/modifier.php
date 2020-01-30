@@ -3,25 +3,26 @@
 $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root','');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	
 
     $idd = $_GET['id'];
 
-    $req="SELECT * FROM events WHERE id_ev=?";
+    $req='SELECT * FROM events WHERE id_ev=:id';
 
     $reponse = $bdd->prepare($req);
 
-    $reponse->execute(array($idd));
+    $reponse->execute(array('id'=> $idd));
 
-    $donnee = $reponse->fetch();
-    if(!$donnee){	
-        header('location: admin_space.php');
+    //$donnee = $reponse->fetch();
+    if(!($donnee = $reponse->fetch())){	
+        header('location:../LOGIN/admin_space.php');
     }
     else
-    {
-        $rep = $bdd->query("SELECT * FROM organisatuer");
+    {$f=$donnee['id_org'];
+        $fa=$donnee['id_salle'];
+        $rep = $bdd->query("SELECT * FROM organisatuer WHERE id_org='".$f."' ");
         $org = $rep->fetch();
-        $repsalle = $bdd->query("SELECT * FROM salle");
+
+        $repsalle = $bdd->query("SELECT * FROM salle WHERE id_salle='".$fa."' ");
         $sl = $repsalle->fetch();
     }
     
@@ -61,7 +62,7 @@ $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                         <input type="text" name="nom" 
                         placeholder="Nom" value= "<?php echo($org['nom']); ?>" required></label>
                         <div class="pren" ><label>Prénom :
-                        <input type="text" name="prenom" value= "<?php echo($org['prénom']); ?>" required> </label></ div>
+                        <input type="text" name="prenom" value= "<?php echo($org['prénom']); ?>" required> </label>
                     </div>
 
                     <div class="place line">
