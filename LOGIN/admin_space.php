@@ -39,6 +39,7 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
     
 </head>
 <body>
+  
   <!-- Modal de salle -->
   <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -57,6 +58,21 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
             </form>
+            <hr>
+            <p>Supprimer une salle</p>
+            <form action="../PHP/delete.php" method="post">
+              <select name="type_salle">
+                <?php 
+                $h=$bdd->query('SELECT * FROM salle');
+                while($y=$h->fetch()){
+                ?>
+                <option> <?php echo $y['nom_salle'] ?></option>
+                <?php } ?>
+              </select>
+              <button type="submit" class="btn btn-primary">Supprimer</button>
+            </form>
+
+              
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -85,7 +101,7 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
                 <th scope="col">Date début</th>
                 <th scope="col">Date fin</th>
                 <th scope="col">Action</th>
-                <th><button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#details">
+                <th><button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details">
                 <i class="fas fa-trash-alt"></i> Ajouter salle </button></th>
               </tr>
             </thead>
@@ -118,9 +134,9 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
                     <a class="btn btn-sm btn-success" href="../PHP/publier.php?id=<?php echo($donnees['id_ev']); ?>"><i class="fas fa-trash-alt"></i>Publier</a>
                      <!-- <a class="btn btn-sm btn-danger" href="../PHP/modal.php"><i class="fas fa-trash-alt"></i>Détails</a>  -->
                     
-                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#detail">
+                    <!-- <button href="admin_space.php?id=<?php echo($donnees['id_ev']); ?>" type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#detail">
                     Détails
-                    </button>
+                    </button> -->
                            
                 </td>
                 <?php
@@ -133,57 +149,25 @@ $bdd = new PDO('mysql:host=localhost;dbname=projet_web;charset=utf8', 'root', ''
               </tr>
             </tbody>
           </table>
-    </div>
-    <!-- Large modal -->
-
-
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-          <div class="card-body text-center">
-            <h4 class="card-title">Special title treatment</h4>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          </div>
-            <div class=" card col-8 offset-2 my-2 p-3">
-          <form>
-            <div class="form-group">
-              <label for="listname">List name</label>
-              <input type="text" class="form-control" name="listname" id="listname" placeholder="Enter your listname">
             </div>
-            <div class="form-group">
-              <label for="datepicker">Deadline</label>
-              <input  type="text" class="form-control" name="datepicker" id="datepicker" placeholder="Pick up a date">
-            </div>
-            <div class="form-group">
-                                    <label for="datepicker">Add a list item</label>
-                <div class="input-group">
 
-                  <input type="text" class="form-control" placeholder="Add an item" aria-label="Search for...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-secondary" type="button">Go!</button>
-                  </span>
-                </div>
-              </div>
-           <div class="form-group text-center">
-             <button type="submit" class="btn btn-block btn-primary">Sign in</button>
-          </div>
-        </form>
-    </div>
-    </div>
-  </div>
-</div>
-</div>
-</main>
-<!--  -->
+
+<!-- deconnection -->
 <center>
 <form action="LogOut.php" method='post'>
     <button type='submit' value='Log out' class='btn btn-primary'>Se déconnecter</button>
+     <a href="../home2.php"> <input type="button" value="Page d'acceuil" class='btn btn-primary'></a>
 </form>
 </center>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+})
+</script>
 </body> 
 </html>
 
